@@ -1,18 +1,35 @@
-import torch
-#from utilities import seed_everything
+import argparse
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--folder", type=str, required=False, default= './PASCAL_VOC/')
+    parser.add_argument("--image_size", type=int, required=False, default=416)
+    parser.add_argument("--fold", type=int, required=False, default=0)
+    parser.add_argument("--num_classes", type=int, required=False, default=20)
+    parser.add_argument("--loss", type=str, required=False, default="Dice_BCE")
+    parser.add_argument("--lr", type=float, required=False, default=8e-5)
+    parser.add_argument("--batch_size", type=int, default=32, required=False)
+    parser.add_argument("--epochs", type=int, default=21, required=False)
+    parser.add_argument(
+        "--csv_path",
+        type=str,
+        default="../input/hubmap-folds/train_unsplit_data.csv",
+        required=False,
+    )
+    return parser.parse_args()
 
-DATASET = './PASCAL_VOC/'
-#DEVICE = "cuda:1" if torch.cuda.is_available() else "cpu"
+args = parse_args()
+
+DATASET = args.folder
 GPU = 0
-seed = 42#seed_everything()  # If you want deterministic behavior
+seed = 42 #seed_everything()  # If you want deterministic behavior
 NUM_WORKERS = 8
-BATCH_SIZE = 32
-IMAGE_SIZE = 416
-NUM_CLASSES = 20
+BATCH_SIZE = args.batch_size
+IMAGE_SIZE = args.image_size
+NUM_CLASSES = args.num_classes
 LEARNING_RATE = 1e-3
 WEIGHT_DECAY = 1e-4
 NUM_EPOCHS = 700
-CLIP = None#0.99999
+CLIP = None # 0.99999
 CONF_THRESHOLD = 0.2
 MAP_IOU_THRESH = 0.5
 NMS_IOU_THRESH = 0.45
